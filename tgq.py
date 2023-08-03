@@ -2,6 +2,7 @@ import torch.multiprocessing as mp
 import torch.nn as nn
 import torch.optim as optim
 import torch.utils.data
+import math
 
 import argparse
 from torch.distributions import Normal
@@ -485,6 +486,14 @@ def get_betas(schedule_type, b_start, b_end, time_num):
     elif schedule_type == 'sigmoid':
         betas_space = np.linspace(-6, 6, time_num)
         betas = torch.sigmoid(betas_space) * (b_end - b_start) + b_start
+    elif schedule_type == 'cosine':
+        def ab_fn(t):
+            return math.cos((t + 0.008) / 1.008 * math.pi / 2) ** 2
+        betas = []
+        for i in range(time_num):
+            t1 = i / time_num
+            t2 = (i + 1) / time_num
+            betas.append(min(1 - alpha_bar_fn(t2) / alpha_bar_fn(t1), 0.999))
     else:
         raise NotImplementedError(schedule_type)
     return betas
@@ -802,7 +811,7 @@ def parse_args():
     '''model'''
     parser.add_argument('--beta_start', type=float, default=0.0001)
     parser.add_argument('--beta_end', type=float, default=0.02)
-    parser.add_argument('--schedule_type', default='linear')
+    parser.add_argument('--schedule_type', default='cosine')
     parser.add_argument('--time_num', type=int, default=1000)
 
     #params
