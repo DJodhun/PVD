@@ -487,7 +487,7 @@ def get_betas(schedule_type, b_start, b_end, time_num):
         betas_space = np.linspace(-6, 6, time_num)
         betas = torch.sigmoid(betas_space) * (b_end - b_start) + b_start
     elif schedule_type == 'cosine':
-        def ab_fn(t):
+        def alpha_bar_fn(t):
             return math.cos((t + 0.008) / 1.008 * math.pi / 2) ** 2
         betas = []
         for i in range(time_num):
