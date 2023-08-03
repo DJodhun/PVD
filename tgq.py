@@ -489,11 +489,12 @@ def get_betas(schedule_type, b_start, b_end, time_num):
     elif schedule_type == 'cosine':
         def alpha_bar_fn(t):
             return math.cos((t + 0.008) / 1.008 * math.pi / 2) ** 2
-        betas = []
+        inter = []
         for i in range(time_num):
             t1 = i / time_num
             t2 = (i + 1) / time_num
-            betas.append(min(1 - alpha_bar_fn(t2) / alpha_bar_fn(t1), 0.999))
+            inter.append(min(1 - alpha_bar_fn(t2) / alpha_bar_fn(t1), 0.999))
+        betas = inter
     else:
         raise NotImplementedError(schedule_type)
     return betas
