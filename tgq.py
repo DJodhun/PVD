@@ -482,6 +482,9 @@ def get_betas(schedule_type, b_start, b_end, time_num):
         betas = b_end * np.ones(time_num, dtype=np.float64)
         warmup_time = int(time_num * 0.5)
         betas[:warmup_time] = np.linspace(b_start, b_end, warmup_time, dtype=np.float64)
+    elif schedule_type == 'sigmoid':
+        betas_space = np.linspace(-6, 6, time_num)
+        betas = torch.sigmoid(betas_space) * (b_end - b_start) + b_start
     else:
         raise NotImplementedError(schedule_type)
     return betas
