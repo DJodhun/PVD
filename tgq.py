@@ -484,8 +484,12 @@ def get_betas(schedule_type, b_start, b_end, time_num):
         warmup_time = int(time_num * 0.5)
         betas[:warmup_time] = np.linspace(b_start, b_end, warmup_time, dtype=np.float64)
     elif schedule_type == 'sigmoid':
+        def sigmoid(x):
+            y = 1 / (1 + np.exp(-x))
+            return y
+            
         betas_space = np.linspace(-6, 6, time_num)
-        betas = torch.sigmoid(betas_space) * (b_end - b_start) + b_start
+        betas = sigmoid(betas_space) * (b_end - b_start) + b_start
     elif schedule_type == 'cosine':
         def alpha_bar_fn(t):
             return math.cos((t + 0.008) / 1.008 * math.pi / 2) ** 2
@@ -494,7 +498,7 @@ def get_betas(schedule_type, b_start, b_end, time_num):
             t1 = i / time_num
             t2 = (i + 1) / time_num
             inter.append(min(1 - alpha_bar_fn(t2) / alpha_bar_fn(t1), 0.999))
-        betas = inter
+        betas = np.array(inter)
     else:
         raise NotImplementedError(schedule_type)
     return betas
