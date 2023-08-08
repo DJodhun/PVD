@@ -714,7 +714,6 @@ def train(gpu, opt, output_dir, noises_init):
 
                 x_gen_eval = model.gen_samples(new_x_chain(x, 25).shape, x.device, clip_denoised=False)
                 x_gen_eval_100 = model.gen_samples(new_x_chain(x, 100).shape, x.device, clip_denoised=False)
-                x_gen_val_100 = model.gen_samples(new_x_chain(x, 100).shape, x.device, clip_denoised=False)
                 torch.save(x_gen_eval_100, '%s/epoch_%03d_output_tens.pt' % (output_dir, epoch))
                 x_gen_list = model.gen_sample_traj(new_x_chain(x, 1).shape, x.device, freq=40, clip_denoised=False)
                 x_gen_all = torch.cat(x_gen_list, dim=0)
