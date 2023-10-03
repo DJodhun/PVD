@@ -1,5 +1,4 @@
-# Simulating the Universe: Using Latent Diffusion Models to Create Cosmological
-Data
+# Simulating the Universe: Using Latent Diffusion Models to Create Cosmological Data
 
 This model is based on Alex Zhou et al's Point Voxel Diffusion Model, found here: https://github.com/alexzhou907/PVD. Their paper can be found here: https://arxiv.org/abs/2104.03670. 
 
